@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject menuUI;
     [SerializeField] GameObject inGameUI;
     [SerializeField] GameObject goalText;
+    [SerializeField] GameObject rewardsButtons;
     [SerializeField] GameObject readyButton;
     [SerializeField] TextMeshProUGUI countdownText;
     [SerializeField] GameObject characterSelect;
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
     {
         inGameUI.SetActive(false);
         goalText.SetActive(false);
+        rewardsButtons.SetActive(false);
         readyButton.SetActive(false);
         countdownText.text = "";
         UpdateSelectedChara(0);
@@ -36,6 +38,11 @@ public class UIManager : MonoBehaviour
     public void ActiveGoalText(bool value)
     {
         goalText.SetActive(value);
+    }
+
+    public void ActiveRewardsButtons(bool value)
+    {
+        rewardsButtons.SetActive(value);
     }
 
     public void ActiveReadyButton(bool value)

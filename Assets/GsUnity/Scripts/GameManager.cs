@@ -76,6 +76,8 @@ public class GameManager : NetworkBehaviour
             uiManager.ActiveGoalText(true);
             soundManager.PlayGoalSe();
             IsLocalPlayerGoaled = true;
+
+            uiManager.ActiveRewardsButtons(true);
         }
     }
 

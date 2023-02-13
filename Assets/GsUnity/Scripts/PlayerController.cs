@@ -47,7 +47,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] PlayerNameLabel nameLabelPref;
     [SerializeField] Transform nameLabelTarget;
 
-    UIManager uiManager;
+    GameManager gameManager;
 
     public override void Spawned()
     {
@@ -64,7 +64,7 @@ public class PlayerController : NetworkBehaviour
         //emoteInput = input.actions["Emote"]; // Day1課題
         audioSource = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
-        uiManager = FindObjectOfType<UIManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
         distanceToGround = transform.position.y - foot.position.y + 0.1f;
 
@@ -114,7 +114,7 @@ public class PlayerController : NetworkBehaviour
             if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Emote1))
             {
                 emote1Count++;
-                uiManager.ActiveRewardsButtons(true);
+                gameManager.OnEmote(this);
             }
 
             buttonsPrevious = inputData.buttons;

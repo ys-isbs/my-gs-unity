@@ -76,8 +76,16 @@ public class GameManager : NetworkBehaviour
             uiManager.ActiveGoalText(true);
             soundManager.PlayGoalSe();
             IsLocalPlayerGoaled = true;
+        }
+    }
 
-            uiManager.EnableActiveRewardsButtons(true);
+    public void OnEmote(PlayerController player)
+    {
+        var networkPlayer = player.GetComponent<NetworkObject>();
+
+        if (IsLocalPlayerGoaled && networkPlayer.HasInputAuthority)
+        {
+            uiManager.ActiveRewardsButtons(true);
         }
     }
 

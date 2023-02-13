@@ -15,7 +15,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform characters;
     [SerializeField] TMP_InputField nameInputField;
     [SerializeField] TextMeshProUGUI rankingBoard;
-    bool ableActiveRewardsButtons;
 
     // Start is called before the first frame update
     private void Start()
@@ -27,7 +26,6 @@ public class UIManager : MonoBehaviour
         countdownText.text = "";
         UpdateSelectedChara(0);
         rankingBoard.text = "";
-        ableActiveRewardsButtons = false;
     }
 
     public void OnStartGame()
@@ -42,18 +40,10 @@ public class UIManager : MonoBehaviour
         goalText.SetActive(value);
     }
 
-    public void EnableActiveRewardsButtons(bool value)
-    {
-        ableActiveRewardsButtons = value;
-    }
-
     public void ActiveRewardsButtons(bool value)
     {
-        if (ableActiveRewardsButtons)
-        {
-            goalText.GetComponent<TextMeshProUGUI>().text = "CLEAR!";
-            rewardsButtons.SetActive(value);
-        }
+        goalText.GetComponent<TextMeshProUGUI>().text = "CLEAR!";
+        rewardsButtons.SetActive(value);
     }
 
     public void ActiveReadyButton(bool value)

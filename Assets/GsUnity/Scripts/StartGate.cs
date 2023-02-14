@@ -7,6 +7,8 @@ using Fusion;
 public class StartGate : NetworkBehaviour
 {
     [SerializeField] GameObject gate;
+    [SerializeField] GameObject podium;
+    [SerializeField] GameObject npc;
     [Networked] TickTimer timer { get; set; }
     public UnityAction<int> OnCountEvent;
     int preCount;
@@ -33,6 +35,8 @@ public class StartGate : NetworkBehaviour
         if (timer.Expired(Runner))
         {
             gate.SetActive(false);
+            podium.SetActive(false);
+            npc.SetActive(false);
         }
     }
 }

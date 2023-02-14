@@ -64,6 +64,11 @@ public class GameManager : NetworkBehaviour
     {
         if (Runner.IsServer)
         {
+            if (playersRanking.Count == 0)
+            {
+                uiManager.ActiveGoalSphere(true);
+            }
+
             var player = networkPlayer.GetComponent<PlayerController>();
             if (!playersRanking.Contains(player))
             {
@@ -92,12 +97,18 @@ public class GameManager : NetworkBehaviour
     public static void OnChangedRanking(Changed<GameManager> changed)
     {
         changed.Behaviour.UpdateRanking();
+        changed.Behaviour.ActiveGoalSphere();
     }
 
     public void UpdateRanking()
     {
         var names = playersRanking.Select(player => player.Name).ToArray();
         uiManager.UpdateRanking(names);
+    }
+
+    public void ActiveGoalSphere()
+    {
+        uiManager.ActiveGoalSphere(true);
     }
 
     public void StartHost()

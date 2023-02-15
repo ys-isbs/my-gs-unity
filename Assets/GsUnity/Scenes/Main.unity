@@ -1570,7 +1570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5.202383e-10, z: -4}
+  m_FollowOffset: {x: 0, y: 5.867306e-11, z: -4}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -2716,7 +2716,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -50.000183, y: 50}
+  m_AnchoredPosition: {x: -50.000122, y: 50}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &720050585
@@ -2991,7 +2991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5.202383e-10, z: -4}
+  m_FollowOffset: {x: 0, y: 5.867306e-11, z: -4}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -3548,6 +3548,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1147154310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8597698371886135454, guid: 60ab07b23a75fbf458c80cba08df9edb, type: 3}
+  m_PrefabInstance: {fileID: 1269067019}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1156809408
 GameObject:
   m_ObjectHideFlags: 3
@@ -3667,6 +3672,9 @@ MonoBehaviour:
   goalTrigger: {fileID: 963831262}
   soundManager: {fileID: 103246123}
   startGate: {fileID: 1552598651}
+  animatorControllers:
+  - {fileID: 9100000, guid: c38b8ee1e3b914c8cb7aeb79f2602a88, type: 2}
+  - {fileID: 9100000, guid: c5e2f168afd1e405dbd9a784dbd67d2e, type: 2}
   StartSpawnPoint: {fileID: 808993964}
   selectedCharaIndex: 0
   playerName: 
@@ -3733,7 +3741,7 @@ PrefabInstance:
     - target: {fileID: 8903687710321359521, guid: 60ab07b23a75fbf458c80cba08df9edb, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: b4695343b9fbe4512b25592d869b7b12, type: 2}
+      objectReference: {fileID: 9100000, guid: c5e2f168afd1e405dbd9a784dbd67d2e, type: 2}
     - target: {fileID: 8903687710321359521, guid: 60ab07b23a75fbf458c80cba08df9edb, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 1
@@ -3965,7 +3973,7 @@ MonoBehaviour:
   menuUI: {fileID: 234621792}
   inGameUI: {fileID: 1384514739}
   goalText: {fileID: 1667719058}
-  goalSphere: {fileID: 465612757}
+  goalSphereRoleModel: {fileID: 1147154310}
   rewardsButtons: {fileID: 1737906880}
   readyButton: {fileID: 720050583}
   countdownText: {fileID: 600862602}
@@ -4365,7 +4373,7 @@ GameObject:
   - component: {fileID: 1409289349}
   - component: {fileID: 1409289348}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Case
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4922,7 +4930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 5.202383e-10, z: -4}
+  m_FollowOffset: {x: 0, y: 5.867306e-11, z: -4}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1

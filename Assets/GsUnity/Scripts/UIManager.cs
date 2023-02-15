@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject menuUI;
     [SerializeField] GameObject inGameUI;
     [SerializeField] GameObject goalText;
-    [SerializeField] GameObject goalSphere;
+    [SerializeField] GameObject goalSphereRoleModel;
     [SerializeField] GameObject rewardsButtons;
     [SerializeField] GameObject readyButton;
     [SerializeField] TextMeshProUGUI countdownText;
@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     {
         inGameUI.SetActive(false);
         goalText.SetActive(false);
-        goalSphere.SetActive(false);
+        goalSphereRoleModel.SetActive(false);
         rewardsButtons.SetActive(false);
         readyButton.SetActive(false);
         countdownText.text = "";
@@ -42,9 +42,11 @@ public class UIManager : MonoBehaviour
         goalText.SetActive(value);
     }
 
-    public void ActiveGoalSphere(bool value)
+    public void ActiveGoalSphereRoleModel(bool value, RuntimeAnimatorController animatorController)
     {
-        goalSphere.SetActive(value);
+        Animator animator = goalSphereRoleModel.GetComponentInChildren<Animator>();
+        animator.runtimeAnimatorController = animatorController;
+        goalSphereRoleModel.SetActive(value);
     }
 
     public void ActiveRewardsButtons(bool value)

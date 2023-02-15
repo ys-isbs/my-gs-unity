@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Fusion;
 using System.Linq;
+using Fusion;
+using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
@@ -11,6 +10,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] GoalTrigger goalTrigger;
     [SerializeField] SoundManager soundManager;
     [SerializeField] StartGate startGate;
+    [SerializeField] RuntimeAnimatorController[] animatorControllers;
+    [Networked] int animatorControllersIndex { get; set; }
 
     public Transform StartSpawnPoint;
 
@@ -66,7 +67,7 @@ public class GameManager : NetworkBehaviour
         {
             if (playersRanking.Count == 0)
             {
-                uiManager.ActiveGoalSphere(true);
+                animatorControllersIndex = Random.Range(0, animatorControllers.Length);
             }
 
             var player = networkPlayer.GetComponent<PlayerController>();
@@ -108,7 +109,8 @@ public class GameManager : NetworkBehaviour
 
     public void ActiveGoalSphere()
     {
-        uiManager.ActiveGoalSphere(true);
+        var animatorController = animatorControllers[animatorControllersIndex];
+        uiManager.ActiveGoalSphereRoleModel(true, animatorController);
     }
 
     public void StartHost()

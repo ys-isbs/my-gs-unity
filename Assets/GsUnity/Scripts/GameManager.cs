@@ -85,13 +85,17 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    public void OnEmote(PlayerController player)
+    public void OnEmote(PlayerController player, string emoteName)
     {
         var networkPlayer = player.GetComponent<NetworkObject>();
 
         if (IsLocalPlayerGoaled && networkPlayer.HasInputAuthority)
         {
-            uiManager.ActiveRewardsButtons(true);
+            var animatorController = animatorControllers[animatorControllersIndex];
+            if (animatorController.name == emoteName)
+            {
+                uiManager.ActiveRewardsButtons(true);
+            }
         }
     }
 

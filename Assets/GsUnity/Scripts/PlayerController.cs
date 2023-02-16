@@ -28,6 +28,10 @@ public class PlayerController : NetworkBehaviour
     int lastVisibleJump;
     [Networked] int emote1Count { get; set; }
     int lastVisibleEmote1;
+    [Networked] int attack01Count { get; set; }
+    int lastVisibleAttack01;
+    [Networked] int attack02Count { get; set; }
+    int lastVisibleAttack02;
 
     float distanceToGround;
     bool isGrounded;
@@ -70,6 +74,8 @@ public class PlayerController : NetworkBehaviour
 
         lastVisibleJump = jumpCount;
         lastVisibleEmote1 = emote1Count;
+        lastVisibleAttack01 = attack01Count;
+        lastVisibleAttack02 = attack02Count;
 
         if (Object.HasInputAuthority)
         {
@@ -113,8 +119,20 @@ public class PlayerController : NetworkBehaviour
 
             if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Emote1))
             {
+                gameManager.OnEmote(this, "Emote1");
                 emote1Count++;
-                gameManager.OnEmote(this);
+            }
+
+            if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Attack01))
+            {
+                gameManager.OnEmote(this, "Attack01");
+                attack01Count++;
+            }
+
+            if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Attack02))
+            {
+                gameManager.OnEmote(this, "Attack02");
+                attack02Count++;
             }
 
             buttonsPrevious = inputData.buttons;
@@ -130,14 +148,25 @@ public class PlayerController : NetworkBehaviour
             audioSource.PlayOneShot(jumpSe);
             animator.SetTrigger("Jump");
         }
+        lastVisibleJump = jumpCount;
 
         if (emote1Count > lastVisibleEmote1)
         {
             animator.SetTrigger("Emote1");
         }
-
-        lastVisibleJump = jumpCount;
         lastVisibleEmote1 = emote1Count;
+
+        if (attack01Count > lastVisibleAttack01)
+        {
+            animator.SetTrigger("Attack01");
+        }
+        lastVisibleAttack01 = attack01Count;
+
+        if (attack02Count > lastVisibleAttack02)
+        {
+            animator.SetTrigger("Attack02");
+        }
+        lastVisibleAttack02 = attack02Count;
     }
 
     // Update is called once per frame

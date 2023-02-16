@@ -12,9 +12,13 @@ public class InputProvider : MonoBehaviour, INetworkRunnerCallbacks
     InputAction moveInput;
     InputAction jumpInput;
     InputAction emote1Input;
+    InputAction attack01Input;
+    InputAction attack02Input;
     Vector3 moveDirection;
     bool jumpInputPressed;
     bool emote1InputPressed;
+    bool attack01InputPressed;
+    bool attack02InputPressed;
     PlayerInputData inputData = new PlayerInputData();
     Camera cam;
 
@@ -25,6 +29,8 @@ public class InputProvider : MonoBehaviour, INetworkRunnerCallbacks
         moveInput = input.actions["Move"];
         jumpInput = input.actions["Jump"];
         emote1Input = input.actions["Emote1"];
+        attack01Input = input.actions["Attack01"];
+        attack02Input = input.actions["Attack02"];
         cam = Camera.main;
     }
 
@@ -46,6 +52,16 @@ public class InputProvider : MonoBehaviour, INetworkRunnerCallbacks
         {
             emote1InputPressed = true;
         }
+
+        if (attack01Input.WasPressedThisFrame())
+        {
+            attack01InputPressed = true;
+        }
+
+        if (attack02Input.WasPressedThisFrame())
+        {
+            attack02InputPressed = true;
+        }
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
@@ -53,10 +69,14 @@ public class InputProvider : MonoBehaviour, INetworkRunnerCallbacks
         inputData.moveDirection = moveDirection;
         inputData.buttons.Set(InputButtons.Jump, jumpInputPressed);
         inputData.buttons.Set(InputButtons.Emote1, emote1InputPressed);
+        inputData.buttons.Set(InputButtons.Attack01, attack01InputPressed);
+        inputData.buttons.Set(InputButtons.Attack02, attack02InputPressed);
         input.Set(inputData);
         inputData = default;
         jumpInputPressed = false;
         emote1InputPressed = false;
+        attack01InputPressed = false;
+        attack02InputPressed = false;
     }
 
     public void OnConnectedToServer(NetworkRunner runner) { }

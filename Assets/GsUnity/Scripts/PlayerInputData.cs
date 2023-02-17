@@ -7,6 +7,8 @@ enum InputButtons
 {
     Jump = 0,
     Emote1 = 1,
+    Attack01 = 2,
+    Attack02 = 3
 }
 
 public struct PlayerInputData : INetworkInput

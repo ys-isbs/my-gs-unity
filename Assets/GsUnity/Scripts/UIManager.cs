@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject menuUI;
     [SerializeField] GameObject inGameUI;
+    [SerializeField] GameObject ruleCanvas;
     [SerializeField] GameObject goalText;
     [SerializeField] GameObject goalSphereRoleModel;
     [SerializeField] GameObject rewardsButtons;
@@ -58,6 +59,11 @@ public class UIManager : MonoBehaviour
     public void ActiveReadyButton(bool value)
     {
         readyButton.SetActive(value);
+    }
+
+    public void OnClickCloseRuleButton()
+    {
+        ruleCanvas.SetActive(false);
     }
 
     public void UpdateCountdown(string count)

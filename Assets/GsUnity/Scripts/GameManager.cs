@@ -23,10 +23,18 @@ public class GameManager : NetworkBehaviour
     [Capacity(10)]
     private NetworkLinkedList<PlayerController> playersRanking => default;
 
+    [Networked(OnChanged = nameof(OnChangedRule))]
+    private NetworkBool ruleActive { get; set; }
+
     private void Start()
     {
         goalTrigger.OnGoalEvent += OnGoal;
         startGate.OnCountEvent += OnCountdown;
+    }
+
+    public override void Spawned()
+    {
+        ruleActive = true;
     }
 
     public void SelectCharacter(int direction)
@@ -59,6 +67,17 @@ public class GameManager : NetworkBehaviour
     {
         uiManager.ActiveReadyButton(false);
         startGate.StartCountdown(5);
+        ruleActive = false;
+    }
+
+    public static void OnChangedRule(Changed<GameManager> changed)
+    {
+        changed.Behaviour.DeactivateRuleCanvas();
+    }
+
+    public void DeactivateRuleCanvas()
+    {
+        if (!ruleActive) uiManager.OnClickCloseRuleButton();
     }
 
     public void OnGoal(NetworkObject networkPlayer)

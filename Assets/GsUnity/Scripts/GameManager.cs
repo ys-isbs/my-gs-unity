@@ -19,9 +19,13 @@ public class GameManager : NetworkBehaviour
     public int selectedCharaIndex;
     public string playerName;
 
-    [Networked(OnChanged = nameof(OnChangedRanking))]
+    [Networked(OnChanged = nameof(OnChangedGoalRanking))]
     [Capacity(10)]
-    private NetworkLinkedList<PlayerController> playersRanking => default;
+    private NetworkLinkedList<PlayerController> playersGoalRanking => default;
+
+    [Networked(OnChanged = nameof(OnChangedClearRanking))]
+    [Capacity(10)]
+    private NetworkLinkedList<PlayerController> playersClearRanking => default;
 
     private void Start()
     {
@@ -65,15 +69,15 @@ public class GameManager : NetworkBehaviour
     {
         if (Runner.IsServer)
         {
-            if (playersRanking.Count == 0)
+            if (playersGoalRanking.Count == 0)
             {
                 animatorControllersIndex = Random.Range(0, animatorControllers.Length);
             }
 
             var player = networkPlayer.GetComponent<PlayerController>();
-            if (!playersRanking.Contains(player))
+            if (!playersGoalRanking.Contains(player))
             {
-                playersRanking.Add(player);
+                playersGoalRanking.Add(player);
             }
         }
 
@@ -82,39 +86,72 @@ public class GameManager : NetworkBehaviour
             uiManager.ActiveGoalText(true);
             soundManager.PlayGoalSe();
             IsLocalPlayerGoaled = true;
+
+            var playerController = FindObjectOfType<PlayerController>();
+            playerController.OnEmoteEvent += OnEmote;
         }
     }
 
-    public void OnEmote(PlayerController player, string emoteName)
+    //public void OnEmote(PlayerController player, string emoteName)
+    public void OnEmote(NetworkObject networkPlayer, string emoteName)
     {
-        var networkPlayer = player.GetComponent<NetworkObject>();
-
+        //var networkPlayer = player.GetComponent<NetworkObject>();
+        var player = networkPlayer.GetComponent<PlayerController>();
+        Debug.Log(player);
+        Debug.Log(player.name);
+        Debug.Log(networkPlayer);
+        Debug.Log(networkPlayer.name);
+        Debug.Log(IsLocalPlayerGoaled);
+        Debug.Log(networkPlayer.HasInputAuthority);
         if (IsLocalPlayerGoaled && networkPlayer.HasInputAuthority)
         {
+            Debug.Log("IsLocalPlayerGoaled && networkPlayer.HasInputAuthority");
             var animatorController = animatorControllers[animatorControllersIndex];
+            Debug.Log(animatorController);
+            Debug.Log(animatorController.name);
+            Debug.Log(emoteName);
             if (animatorController.name == emoteName)
             {
-                uiManager.ActiveRewardsButtons(true);
+                Debug.Log("animatorController.name == emoteName");
+                Debug.Log(playersClearRanking);
+                Debug.Log(playersClearRanking.Contains(player));
+
+                if (!playersClearRanking.Contains(player))
+                {
+                    uiManager.ActiveRewardsButtons(true);
+                    soundManager.PlayGoalSe();
+                    if (Runner.IsServer)
+                    {
+                        playersClearRanking.Add(player);
+                    }
+                }
             }
         }
     }
 
-    public static void OnChangedRanking(Changed<GameManager> changed)
+    public static void OnChangedGoalRanking(Changed<GameManager> changed)
     {
-        changed.Behaviour.UpdateRanking();
         changed.Behaviour.ActiveGoalSphere();
-    }
-
-    public void UpdateRanking()
-    {
-        var names = playersRanking.Select(player => player.Name).ToArray();
-        uiManager.UpdateRanking(names);
     }
 
     public void ActiveGoalSphere()
     {
-        var animatorController = animatorControllers[animatorControllersIndex];
-        uiManager.ActiveGoalSphereRoleModel(true, animatorController);
+        if (playersGoalRanking.Count == 1)
+        {
+            var animatorController = animatorControllers[animatorControllersIndex];
+            uiManager.ActiveGoalSphereRoleModel(true, animatorController);
+        }
+    }
+
+    public static void OnChangedClearRanking(Changed<GameManager> changed)
+    {
+        changed.Behaviour.UpdateRanking();
+    }
+
+    public void UpdateRanking()
+    {
+        var names = playersClearRanking.Select(player => player.Name).ToArray();
+        uiManager.UpdateRanking(names);
     }
 
     public void StartHost()

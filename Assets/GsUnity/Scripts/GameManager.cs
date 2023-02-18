@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using Fusion;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : NetworkBehaviour
 {
@@ -15,16 +16,20 @@ public class GameManager : NetworkBehaviour
 
     public Transform StartSpawnPoint;
 
-    private bool IsLocalPlayerGoaled;
     public int selectedCharaIndex;
     public string playerName;
 
-    [Networked(OnChanged = nameof(OnChangedRanking))]
-    [Capacity(10)]
-    private NetworkLinkedList<PlayerController> playersRanking => default;
-
     [Networked(OnChanged = nameof(OnChangedRule))]
     private NetworkBool ruleActive { get; set; }
+
+    private bool IsLocalPlayerGoaled;
+    [Networked(OnChanged = nameof(OnChangedGoalRanking))]
+    [Capacity(10)]
+    private NetworkLinkedList<PlayerController> playersGoalRanking => default;
+
+    [Networked(OnChanged = nameof(OnChangedClearRanking))]
+    [Capacity(10)]
+    private NetworkLinkedList<PlayerController> playersClearRanking => default;
 
     private void Start()
     {
@@ -82,17 +87,18 @@ public class GameManager : NetworkBehaviour
 
     public void OnGoal(NetworkObject networkPlayer)
     {
+        var player = networkPlayer.GetComponent<PlayerController>();
+
         if (Runner.IsServer)
         {
-            if (playersRanking.Count == 0)
+            if (playersGoalRanking.Count == 0)
             {
                 animatorControllersIndex = Random.Range(0, animatorControllers.Length);
             }
 
-            var player = networkPlayer.GetComponent<PlayerController>();
-            if (!playersRanking.Contains(player))
+            if (!playersGoalRanking.Contains(player))
             {
-                playersRanking.Add(player);
+                playersGoalRanking.Add(player);
             }
         }
 
@@ -101,6 +107,7 @@ public class GameManager : NetworkBehaviour
             uiManager.ActiveGoalText(true);
             soundManager.PlayGoalSe();
             IsLocalPlayerGoaled = true;
+            player.OnEmoteEvent += OnEmote;
         }
     }
 
@@ -111,22 +118,34 @@ public class GameManager : NetworkBehaviour
         if (IsLocalPlayerGoaled && networkPlayer.HasInputAuthority)
         {
             var animatorController = animatorControllers[animatorControllersIndex];
-            if (animatorController.name == emoteName)
+            if (animatorController.name == emoteName && !playersClearRanking.Contains(player))
             {
                 uiManager.ActiveRewardsButtons(true);
+                soundManager.PlayGoalSe();
+                RPC_OnClear(player);
             }
         }
     }
 
-    public static void OnChangedRanking(Changed<GameManager> changed)
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_OnClear(PlayerController player)
+    {
+        playersClearRanking.Add(player);
+    }
+
+    public static void OnChangedGoalRanking(Changed<GameManager> changed)
+    {
+        changed.Behaviour.ActiveGoalSphere();
+    }
+
+    public static void OnChangedClearRanking(Changed<GameManager> changed)
     {
         changed.Behaviour.UpdateRanking();
-        changed.Behaviour.ActiveGoalSphere();
     }
 
     public void UpdateRanking()
     {
-        var names = playersRanking.Select(player => player.Name).ToArray();
+        var names = playersClearRanking.Select(player => player.Name).ToArray();
         uiManager.UpdateRanking(names);
     }
 

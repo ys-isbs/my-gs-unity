@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Fusion;
 using Cinemachine;
+using UnityEngine.Events;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -32,6 +33,7 @@ public class PlayerController : NetworkBehaviour
     int lastVisibleAttack01;
     [Networked] int attack02Count { get; set; }
     int lastVisibleAttack02;
+    public UnityAction<PlayerController, string> OnEmoteEvent;
 
     float distanceToGround;
     bool isGrounded;
@@ -119,19 +121,16 @@ public class PlayerController : NetworkBehaviour
 
             if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Emote1))
             {
-                gameManager.OnEmote(this, "Emote1");
                 emote1Count++;
             }
 
             if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Attack01))
             {
-                gameManager.OnEmote(this, "Attack01");
                 attack01Count++;
             }
 
             if (isGrounded && inputData.buttons.WasPressed(buttonsPrevious, InputButtons.Attack02))
             {
-                gameManager.OnEmote(this, "Attack02");
                 attack02Count++;
             }
 
@@ -153,18 +152,21 @@ public class PlayerController : NetworkBehaviour
         if (emote1Count > lastVisibleEmote1)
         {
             animator.SetTrigger("Emote1");
+            OnEmoteEvent?.Invoke(this, "Emote1");
         }
         lastVisibleEmote1 = emote1Count;
 
         if (attack01Count > lastVisibleAttack01)
         {
             animator.SetTrigger("Attack01");
+            OnEmoteEvent?.Invoke(this, "Attack01");
         }
         lastVisibleAttack01 = attack01Count;
 
         if (attack02Count > lastVisibleAttack02)
         {
             animator.SetTrigger("Attack02");
+            OnEmoteEvent?.Invoke(this, "Attack02");
         }
         lastVisibleAttack02 = attack02Count;
     }

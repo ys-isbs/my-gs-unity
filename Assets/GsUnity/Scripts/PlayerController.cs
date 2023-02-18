@@ -33,7 +33,6 @@ public class PlayerController : NetworkBehaviour
     int lastVisibleAttack01;
     [Networked] int attack02Count { get; set; }
     int lastVisibleAttack02;
-    public UnityAction<PlayerController, string> OnEmoteEvent;
 
     float distanceToGround;
     bool isGrounded;
@@ -152,21 +151,21 @@ public class PlayerController : NetworkBehaviour
         if (emote1Count > lastVisibleEmote1)
         {
             animator.SetTrigger("Emote1");
-            OnEmoteEvent?.Invoke(this, "Emote1");
+            gameManager.CheckEmote(this, "Emote1");
         }
         lastVisibleEmote1 = emote1Count;
 
         if (attack01Count > lastVisibleAttack01)
         {
             animator.SetTrigger("Attack01");
-            OnEmoteEvent?.Invoke(this, "Attack01");
+            gameManager.CheckEmote(this, "Attack01");
         }
         lastVisibleAttack01 = attack01Count;
 
         if (attack02Count > lastVisibleAttack02)
         {
             animator.SetTrigger("Attack02");
-            OnEmoteEvent?.Invoke(this, "Attack02");
+            gameManager.CheckEmote(this, "Attack02");
         }
         lastVisibleAttack02 = attack02Count;
     }

@@ -107,11 +107,10 @@ public class GameManager : NetworkBehaviour
             uiManager.ActiveGoalText(true);
             soundManager.PlayGoalSe();
             IsLocalPlayerGoaled = true;
-            player.OnEmoteEvent += OnEmote;
         }
     }
 
-    public void OnEmote(PlayerController player, string emoteName)
+    public void CheckEmote(PlayerController player, string emoteName)
     {
         var networkPlayer = player.GetComponent<NetworkObject>();
 
